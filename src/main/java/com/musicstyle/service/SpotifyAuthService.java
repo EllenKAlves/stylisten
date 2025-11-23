@@ -1,81 +1,81 @@
-package com.musicstyle.service;
+package com.stylist.service;
 
-import com.musicstyle.dto.SpotifyUserResponse;
-import com.musicstyle.model.entity.User;
-import com.musicstyle.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.beans.factory.annotation.Value;
-
-import java.time.Instant;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import java.util.Base64;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class SpotifyAuthService {
 
-    private final WebClient spotifyWebClient;
-    private final UserRepository userRepository;
-
-    @Value("${spotify.client-id}")
+    @Value("${spotify.client.id}")
     private String clientId;
 
-    @Value("${spotify.client-secret}")
+    @Value("${spotify.client.secret}")
     private String clientSecret;
 
-    @Value("${spotify.redirect-uri}")
+    @Value("${spotify.redirect.uri}")
     private String redirectUri;
 
-    private static final String SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token";
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public String buildAuthorizationUrl() {
-        return "https://accounts.spotify.com/authorize" +
-                "?client_id=" + clientId +
-                "&response_type=code" +
-                "&redirect_uri=" + redirectUri +
-                "&scope=user-read-email user-read-private";
+    public String getAuthorizationUrl() {
+        return String.format(
+            "https://accounts.spotify.com/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=user-read-recently-played user-top-read",
+            clientId, redirectUri
+        );
     }
 
-    public Map<String, Object> exchangeCodeForToken(String code) {
-        WebClient webClient = WebClient.create(SPOTIFY_TOKEN_URL);
-
-        Map<String, Object> response = webClient.post()
-                .uri("")
-                .header(h -> h.setBasicAuth(clientId, clientSecret))
-                .bodyValue(Map.of(
-                        "grant_type", "authorization_code",
-                        "code", code,
-                        "redirect_uri", redirectUri
-                ))
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
-
-        return response;
+    public String getAccessToken(String code) {
+        String url = "https://accounts.spotify.com/api/token";
+        
+        //headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        String auth = clientId + ":" + clientSecret;
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+        headers.set("Authorization", "Basic " + encodedAuth);
+        
+        //body
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "authorization_code");
+        body.add("code", code);
+        body.add("redirect_uri", redirectUri);
+        
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        
+        try {
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+            return (String) response.getBody().get("access_token");
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao obter token: " + e.getMessage());
+        }
     }
 
-    public Map<String, Object> refreshAccessToken(String refreshToken) {
-        WebClient webClient = WebClient.create(SPOTIFY_TOKEN_URL);
-
-        return webClient.post()
-                .uri("")
-                .header(h -> h.setBasicAuth(clientId, clientSecret))
-                .bodyValue(Map.of(
-                        "grant_type", "refresh_token",
-                        "refresh_token", refreshToken
-                ))
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
-
+    public String refreshAccessToken(String refreshToken) {
+        String url = "https://accounts.spotify.com/api/token";
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        String auth = clientId + ":" + clientSecret;
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+        headers.set("Authorization", "Basic " + encodedAuth);
+        
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", "refresh_token");
+        body.add("refresh_token", refreshToken);
+        
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        
+        try {
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+            return (String) response.getBody().get("access_token");
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao renovar token: " + e.getMessage());
+        }
     }
-
-    public record SpotifyTokenResponse(
-        String access_token,
-        String token_type,
-        int expires_in,
-        String refresh_token,
-        String scope
-    ) {}
 }

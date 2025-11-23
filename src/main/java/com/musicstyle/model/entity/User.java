@@ -1,4 +1,4 @@
-package com.musicstyle.model.entity;
+package com.stylist.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,6 @@
-package com.musicstyle.controller;
+package com.stylist.controller;
 
-import com.musicstyle.service.StyleAnalysisService;
+import com.stylist.service.StyleAnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.musicstyle.dto;
+package com.stylist.dto;
 
 import lombok.Data;
 import java.util.List;

@@ -1,22 +1,29 @@
 package com.stylist.controller;
 
 import com.stylist.model.Music;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.stylist.service.SpotifyUserService;
+import com.stylist.service.SpotifyAuthService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/music")
-public class MusicController {
+public class SpotifyController {
 
-    private final SpotifyUserService spotifyService;
+    @Autowired
+    private final SpotifyUserService spotifyUserService;
 
-    public MusicController(SpotifyUserService spotifyService) {
-        this.spotifyService = spotifyService;
+    @Autowired
+    private final SpotifyAuthService spotifyAuthService;
+
+    public SpotifyController(SpotifyUserService spotifyUserService) {
+        this.spotifyUserService = spotifyUserService;
     }
 
-    @GetMapping("/style/{styleName}")
+    @GetMapping("/music/{styleName}")
     public List<Music> getMusicByStyle(@PathVariable String styleName) {
-        return spotifyService.findMusicByStyle(styleName);
+       // return spotifyUserService.findMusicByStyle(styleName);
+     return ResponseEntity.ok("Busca por estilo em desenvolvimento");
+
     }
 }

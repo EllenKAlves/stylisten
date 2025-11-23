@@ -1,31 +1,28 @@
-package com.musicstyle.controller;
+package com.stylist.controller;
 
-import com.musicstyle.service.SpotifyAuthService;
-import lombok.RequiredArgsConstructor;
+import com.stylist.service.SpotifyUserService;
+import com.stylist.service.SpotifyAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity; 
 
 @RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    private final SpotifyAuthService spotifyAuthService;
+    @Autowired
+    private SpotifyUserService spotifyUserService;
+    
+    @Autowired
+    private SpotifyAuthService spotifyAuthService;
 
     @GetMapping("/login")
     public ResponseEntity<String> login() {
-        String loginUrl = authService.buildAuthorizationUrl();
-        return ResponseEntity.ok(loginUrl);
+        return ResponseEntity.ok(spotifyAuthService.getAuthorizationUrl());
     }
-
-
-    @GetMapping("/callback")
-    public ResponseEntity<String> callback(@RequestParam("code") String code) {
-        return ResponseEntity.ok(authService.exchangeCodeForToken(code));
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<String> refresh(@RequestParam("refreshToken") String refreshToken) {
-        return ResponseEntity.ok(authService.refreshAccessToken(refreshToken));
+    
+   @GetMapping("/callback")
+public ResponseEntity<String> callback(@RequestParam String code) {
+    return ResponseEntity.ok(spotifyAuthService.getAccessToken(code));
     }
 }

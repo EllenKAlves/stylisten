@@ -1,8 +1,8 @@
-package com.musicstyle.service;
+package com.stylist.service;
 
-import com.musicstyle.dto.SpotifyUserResponse;
-import com.musicstyle.model.entity.User;
-import com.musicstyle.repository.UserRepository;
+import com.stylist.dto.SpotifyUserResponse;
+import com.stylist.model.entity.User;
+import com.stylist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class SpotifyUserService {
 
     private final WebClient spotifyWebClient;
+    private final SpotifyAuthService spotifyAuthService;
     private final UserRepository userRepository;
 
     public User fetchAndSaveSpotifyUser(String accessToken) {
@@ -35,5 +36,10 @@ public class SpotifyUserService {
         user.setFollowers(response.getFollowers().getTotal());
 
         return userRepository.save(user);
+    }
+
+    public List<Music> findMusicByStyle(String styleName) {
+        // Implemetar lógica de programação
+       throw new UnsupportedOperationException("Método não desenvolvido ainda");
     }
 }

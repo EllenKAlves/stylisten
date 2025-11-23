@@ -1,4 +1,4 @@
-package com.musicstyle.music_to_style;
+package com.stylist.music_to_style;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

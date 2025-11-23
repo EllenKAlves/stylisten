@@ -1,6 +1,14 @@
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://SEU_AUTH_SERVER_URL
+spotify:
+  client:
+    id: bdb7fbaa2493404fa630a785ed9057ac
+    secret: 7c27e7adf2434384a98aea419512a7be
+  redirect:
+    uri: http://127.0.0.1:8000/callback
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.stylist: DEBUG
