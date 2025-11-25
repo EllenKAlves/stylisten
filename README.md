@@ -1,1 +1,1 @@
-# stylist
+# stylisten
