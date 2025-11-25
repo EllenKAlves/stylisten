@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ChangeSet 1: Create users table -->
+    <changeSet id="1" author="stylisten">
+        <createTable tableName="users">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 2: Create spotify_accounts table -->
+    <changeSet id="2" author="stylisten">
+        <createTable tableName="spotify_accounts">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_spotify_user" references="users(id)"/>
+            </column>
+            <column name="spotify_user_id" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="access_token" type="text"/>
+            <column name="refresh_token" type="text"/>
+            <column name="token_expires_at" type="timestamp with time zone"/>
+            <column name="last_sync_at" type="timestamp with time zone"/>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 3: Create tracks_cache table -->
+    <changeSet id="3" author="stylisten">
+        <createTable tableName="tracks_cache">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="spotify_track_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_track_user" references="users(id)"/>
+            </column>
+            <column name="played_at" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="artist_name" type="varchar(500)"/>
+            <column name="track_name" type="varchar(500)"/>
+            <column name="genres" type="jsonb"/>
+            <column name="created_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="tracks_cache" indexName="idx_user_played_at">
+            <column name="user_id"/>
+            <column name="played_at"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 4: Create genre_stats table -->
+    <changeSet id="4" author="stylisten">
+        <createTable tableName="genre_stats">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_genrestat_user" references="users(id)"/>
+            </column>
+            <column name="genre_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="raw_count" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="normalized_score" type="numeric(5,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="period_start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="period_end" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="genre_stats" indexName="idx_user_period">
+            <column name="user_id"/>
+            <column name="period_start"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 5: Create styles table -->
+    <changeSet id="5" author="stylisten">
+        <createTable tableName="styles">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="tags" type="text[]"/>
+            <column name="example_images" type="jsonb"/>
+            <column name="created_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- ChangeSet 6: Create genre_style_mapping table -->
+    <changeSet id="6" author="stylisten">
+        <createTable tableName="genre_style_mapping">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="genre_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="style_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_mapping_style" references="styles(id)"/>
+            </column>
+            <column name="weight" type="numeric(3,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="genre_style_mapping" indexName="idx_genre_name">
+            <column name="genre_name"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- ChangeSet 7: Insert sample data -->
+    <changeSet id="7" author="stylisten">
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Minimalista Industrial"/>
+            <column name="description" value="Estilo clean com peças estruturadas, paleta neutra e materiais técnicos"/>
+            <column name="tags" value="{'minimal','industrial','tech','neutral'}"/>
+        </insert>
+        
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Street Dark"/>
+            <column name="description" value="Urban streetwear com paleta escura, oversized e influências underground"/>
+            <column name="tags" value="{'streetwear','dark','urban','oversized'}"/>
+        </insert>
+        
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Boho Vintage"/>
+            <column name="description" value="Peças vintage, estampas florais, texturas naturais e cores terrosas"/>
+            <column name="tags" value="{'boho','vintage','natural','earthy'}"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

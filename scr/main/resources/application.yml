@@ -1,0 +1,83 @@
+spring:
+  application:
+    name: stylisten-api
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stylisten
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 60000
+  
+  security:
+    oauth2:
+      client:
+        registration:
+          spotify:
+            client-id: ${SPOTIFY_CLIENT_ID}
+            client-secret: ${SPOTIFY_CLIENT_SECRET}
+            scope: user-read-recently-played,user-top-read
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/api/v1/auth/spotify/callback"
+        provider:
+          spotify:
+            authorization-uri: https://accounts.spotify.com/authorize
+            token-uri: https://accounts.spotify.com/api/token
+            user-info-uri: https://api.spotify.com/v1/me
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+api:
+  version: v1
+  base-path: /api/v1
+
+jwt:
+  secret: ${JWT_SECRET:my-secret-key-change-in-production}
+  expiration: 86400000 # 24 hours
+
+spotify:
+  api:
+    base-url: https://api.spotify.com/v1
+    rate-limit:
+      max-requests: 100
+      window-seconds: 60
+  cache:
+    ttl-hours: 6
+
+stylisten:
+  profile:
+    history-days: 30
+    top-genres-limit: 5
+    min-score: 0.0
+    max-score: 10.0
+
+logging:
+  level:
+    com.stylisten: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
