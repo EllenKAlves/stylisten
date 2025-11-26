@@ -56,7 +56,6 @@ public class StyleService {
                 request.getTags().toArray(new String[0]) : new String[0])
             .build();
 
-        // Salva imagens como JSON
         if (request.getExampleImages() != null && !request.getExampleImages().isEmpty()) {
             try {
                 style.setExampleImages(
@@ -69,7 +68,7 @@ public class StyleService {
 
         style = styleRepository.save(style);
 
-        // Cria mapeamentos gênero -> estilo
+        //criando mapeamento
         if (request.getGenreMappings() != null) {
             List<GenreStyleMapping> mappings = request.getGenreMappings().stream()
                 .map(m -> GenreStyleMapping.builder()
@@ -108,7 +107,7 @@ public class StyleService {
             }
         }
 
-        // Remove mapeamentos antigos e cria novos
+        //remove mapeamentos antigos e faz novos, vai q a pessoa mudou ne
         if (request.getGenreMappings() != null) {
             List<GenreStyleMapping> existingMappings = 
                 mappingRepository.findByGenreNameIn(

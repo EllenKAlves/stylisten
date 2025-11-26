@@ -64,17 +64,15 @@ public class AuthService {
         User user = userRepository.findById(request.getUserId())
             .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        // Troca code por access token
+    
         Map<String, Object> tokenResponse = exchangeCodeForToken(request.getCode());
 
         String accessToken = (String) tokenResponse.get("access_token");
         String refreshToken = (String) tokenResponse.get("refresh_token");
         Integer expiresIn = (Integer) tokenResponse.get("expires_in");
 
-        // Busca perfil do Spotify
         SpotifyUserProfile profile = spotifyClient.getUserProfile(accessToken);
 
-        // Salva ou atualiza conta Spotify
         SpotifyAccount account = spotifyAccountRepository
             .findBySpotifyUserId(profile.getId())
             .orElse(SpotifyAccount.builder()
@@ -113,7 +111,7 @@ public class AuthService {
         Instant now = Instant.now();
         Instant expiresAt = account.getTokenExpiresAt();
 
-        // Renova se expirado ou prestes a expirar (5 min de margem)
+        //renova token se expirou ou ta perto (5min de margem)
         if (expiresAt == null || expiresAt.isBefore(now.plusSeconds(300))) {
             log.info("Renovando token do Spotify para usuário: {}", userId);
 
@@ -129,7 +127,7 @@ public class AuthService {
             account.setAccessToken(newAccessToken);
             account.setTokenExpiresAt(now.plusSeconds(expiresIn));
 
-            // Atualiza refresh token se fornecido
+            //atualiza refresh token(se fornecido)
             if (tokenResponse.containsKey("refresh_token")) {
                 String newRefreshToken = (String) tokenResponse.get("refresh_token");
                 account.setRefreshToken(newRefreshToken);

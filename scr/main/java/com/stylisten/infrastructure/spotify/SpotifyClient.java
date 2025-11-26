@@ -73,7 +73,7 @@ public class SpotifyClient {
                     break;
                 }
                 
-                // Limita paginação para evitar loops infinitos
+                //sem loopings infinitos
                 if (allItems.size() >= 1000) {
                     log.warn("Limite de 1000 tracks alcançado, parando paginação");
                     break;

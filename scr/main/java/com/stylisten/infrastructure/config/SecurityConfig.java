@@ -27,7 +27,7 @@ public class SecurityConfig {
             .sessionManagement(session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Endpoints públicos
+                //endpoints publicos
                 .requestMatchers(
                     "/api/v1/health",
                     "/api/v1/auth/**",
@@ -36,11 +36,11 @@ public class SecurityConfig {
                     "/swagger-resources/**",
                     "/webjars/**"
                 ).permitAll()
-                // Endpoints que requerem autenticação
+                //precisam autenticar
                 .requestMatchers("/api/v1/stylisten/**").authenticated()
-                // Endpoints admin
+                //so admin
                 .requestMatchers("/api/v1/styles/**").hasRole("ADMIN")
-                // Todos os outros requerem autenticação
+                //td o resto precisa autenticar
                 .anyRequest().authenticated()
             );
 

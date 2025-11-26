@@ -5,6 +5,8 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
+    <!-- ==================== TABELAS ==================== -->
+
     <!-- ChangeSet 1: Create users table -->
     <changeSet id="1" author="stylisten">
         <createTable tableName="users">
@@ -152,28 +154,297 @@
         </createIndex>
     </changeSet>
 
-    <!-- ChangeSet 7: Insert sample data -->
+    <!-- ==================== DADOS INICIAIS - ESTILOS ==================== -->
+    
+    <!-- ChangeSet 7: Inserir Estilos de Moda -->
     <changeSet id="7" author="stylisten">
+        
+        <!-- 1. Minimalista Industrial -->
         <insert tableName="styles">
             <column name="id" valueComputed="gen_random_uuid()"/>
             <column name="name" value="Minimalista Industrial"/>
-            <column name="description" value="Estilo clean com peças estruturadas, paleta neutra e materiais técnicos"/>
-            <column name="tags" value="{'minimal','industrial','tech','neutral'}"/>
+            <column name="description" value="Estilo clean com peças estruturadas, paleta neutra (preto, branco, cinza) e materiais técnicos. Cortes retos, geométricos e minimalistas."/>
+            <column name="tags" value="{'minimal','industrial','tech','neutral','geometric','structured'}"/>
+            <column name="example_images" value='["https://i.imgur.com/minimal1.jpg","https://i.imgur.com/minimal2.jpg"]'/>
         </insert>
         
+        <!-- 2. Street Dark -->
         <insert tableName="styles">
             <column name="id" valueComputed="gen_random_uuid()"/>
             <column name="name" value="Street Dark"/>
-            <column name="description" value="Urban streetwear com paleta escura, oversized e influências underground"/>
-            <column name="tags" value="{'streetwear','dark','urban','oversized'}"/>
+            <column name="description" value="Urban streetwear com paleta escura, peças oversized e influências underground. Hoodies, cargo pants, sneakers robustos e acessórios statement."/>
+            <column name="tags" value="{'streetwear','dark','urban','oversized','edgy','underground'}"/>
+            <column name="example_images" value='["https://i.imgur.com/street1.jpg"]'/>
         </insert>
         
+        <!-- 3. Boho Vintage -->
         <insert tableName="styles">
             <column name="id" valueComputed="gen_random_uuid()"/>
             <column name="name" value="Boho Vintage"/>
-            <column name="description" value="Peças vintage, estampas florais, texturas naturais e cores terrosas"/>
-            <column name="tags" value="{'boho','vintage','natural','earthy'}"/>
+            <column name="description" value="Peças vintage com estampas florais, texturas naturais e cores terrosas. Vestidos fluidos, camadas, acessórios artesanais e elementos folk."/>
+            <column name="tags" value="{'boho','vintage','natural','earthy','floral','folk','artisan'}"/>
+            <column name="example_images" value='[]'/>
         </insert>
+
+        <!-- 4. Tech Futurista -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Tech Futurista"/>
+            <column name="description" value="Inspiração cyberpunk com tecidos técnicos, elementos neon e metalizado. Silhuetas assimétricas, cortes arquitetônicos e estética sci-fi."/>
+            <column name="tags" value="{'tech','futuristic','cyber','neon','asymmetric','metallic','scifi'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+        <!-- 5. Classic Elegante -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Classic Elegante"/>
+            <column name="description" value="Alfaiataria clássica e peças atemporais em cores sóbrias. Blazers estruturados, calças de corte reto, camisas sociais e sapatos de couro."/>
+            <column name="tags" value="{'classic','elegant','timeless','tailored','formal','sophisticated'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+        <!-- 6. Colorful Pop -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Colorful Pop"/>
+            <column name="description" value="Cores vibrantes e estampas gráficas ousadas. Mix de texturas, inspiração pop art e elementos retrô dos anos 80/90."/>
+            <column name="tags" value="{'colorful','pop','vibrant','graphic','retro','bold','playful'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+        <!-- 7. Athleisure Comfort -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Athleisure Comfort"/>
+            <column name="description" value="Conforto esportivo com estilo. Leggings, joggers, oversized hoodies, tênis chunky e peças em tecidos técnicos respiráveis."/>
+            <column name="tags" value="{'athleisure','comfort','sporty','casual','relaxed','functional'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+        <!-- 8. Grunge Alternative -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Grunge Alternative"/>
+            <column name="description" value="Estética anos 90 grunge: flanelas xadrez, jeans rasgados, coturnos, camisetas de banda e sobreposições desconstruídas."/>
+            <column name="tags" value="{'grunge','alternative','90s','distressed','layered','rock','rebel'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+        <!-- 9. Y2K Nostalgia -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Y2K Nostalgia"/>
+            <column name="description" value="Estilo anos 2000 com cores metalizadas, low-rise, baby tees, mini bags e elementos futuristas retrô."/>
+            <column name="tags" value="{'y2k','2000s','metallic','nostalgic','trendy','fun'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+        <!-- 10. Cottagecore Romantic -->
+        <insert tableName="styles">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name" value="Cottagecore Romantic"/>
+            <column name="description" value="Romântico e pastoral com vestidos floridos, babados, tons pastéis e estética delicada inspirada no campo."/>
+            <column name="tags" value="{'cottagecore','romantic','pastoral','soft','floral','delicate'}"/>
+            <column name="example_images" value='[]'/>
+        </insert>
+
+    </changeSet>
+
+    <!-- ==================== MAPEAMENTOS GÊNERO → ESTILO ==================== -->
+    
+    <!-- ChangeSet 8: Mapeamentos Gênero-Estilo -->
+    <changeSet id="8" author="stylisten">
+        
+        <!-- ========== INDIE ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'indie', id, 0.85
+            FROM styles WHERE name = 'Minimalista Industrial';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'indie', id, 0.75
+            FROM styles WHERE name = 'Boho Vintage';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'indie', id, 0.60
+            FROM styles WHERE name = 'Grunge Alternative';
+        </sql>
+
+        <!-- ========== ROCK ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'rock', id, 0.90
+            FROM styles WHERE name = 'Grunge Alternative';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'rock', id, 0.75
+            FROM styles WHERE name = 'Street Dark';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'rock', id, 0.50
+            FROM styles WHERE name = 'Minimalista Industrial';
+        </sql>
+
+        <!-- ========== ELETRONICA / POP SINTETICO ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'electronic', id, 0.95
+            FROM styles WHERE name = 'Tech Futurista';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'electronic', id, 0.80
+            FROM styles WHERE name = 'Minimalista Industrial';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'synthpop', id, 0.70
+            FROM styles WHERE name = 'Y2K Nostalgia';
+        </sql>
+
+        <!-- ========== POP ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'pop', id, 0.90
+            FROM styles WHERE name = 'Colorful Pop';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'pop', id, 0.85
+            FROM styles WHERE name = 'Y2K Nostalgia';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'pop', id, 0.60
+            FROM styles WHERE name = 'Athleisure Comfort';
+        </sql>
+
+        <!-- ========== HIP HOP / RAP ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'hip hop', id, 0.95
+            FROM styles WHERE name = 'Street Dark';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'hip hop', id, 0.80
+            FROM styles WHERE name = 'Athleisure Comfort';
+        </sql>
+
+        <!-- ========== JAZZ / CLASSICAL ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'jazz', id, 0.90
+            FROM styles WHERE name = 'Classic Elegante';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'classical', id, 0.95
+            FROM styles WHERE name = 'Classic Elegante';
+        </sql>
+
+        <!-- ========== FOLK / COUNTRY ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'folk', id, 0.95
+            FROM styles WHERE name = 'Boho Vintage';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'folk', id, 0.85
+            FROM styles WHERE name = 'Cottagecore Romantic';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'country', id, 0.80
+            FROM styles WHERE name = 'Boho Vintage';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'country', id, 0.90
+            FROM styles WHERE name = 'Cottagecore Romantic';
+        </sql>
+
+        <!-- ========== METAL ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'metal', id, 0.85
+            FROM styles WHERE name = 'Grunge Alternative';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'metal', id, 0.90
+            FROM styles WHERE name = 'Street Dark';
+        </sql>
+
+        <!-- ========== AMBIENT ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'ambient', id, 0.80
+            FROM styles WHERE name = 'Minimalista Industrial';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'ambient', id, 0.70
+            FROM styles WHERE name = 'Cottagecore Romantic';
+        </sql>
+
+        <!-- ========== R&B / SOUL ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'r&b', id, 0.75
+            FROM styles WHERE name = 'Classic Elegante';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'r&b', id, 0.70
+            FROM styles WHERE name = 'Athleisure Comfort';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'soul', id, 0.80
+            FROM styles WHERE name = 'Classic Elegante';
+        </sql>
+
+        <!-- ========== PUNK ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'punk', id, 0.95
+            FROM styles WHERE name = 'Grunge Alternative';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'punk', id, 0.80
+            FROM styles WHERE name = 'Street Dark';
+        </sql>
+
+        <!-- ========== HOUSE / TECHNO ========== -->
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'house', id, 0.90
+            FROM styles WHERE name = 'Tech Futurista';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'house', id, 0.75
+            FROM styles WHERE name = 'Minimalista Industrial';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'techno', id, 0.95
+            FROM styles WHERE name = 'Tech Futurista';
+        </sql>
+        <sql>
+            INSERT INTO genre_style_mapping (id, genre_name, style_id, weight)
+            SELECT gen_random_uuid(), 'techno', id, 0.80
+            FROM styles WHERE name = 'Minimalista Industrial';
+        </sql>
+
     </changeSet>
 
 </databaseChangeLog>

@@ -46,7 +46,7 @@ public class ProfileService {
         SpotifyAccount account = spotifyAccountRepository.findByUserId(userId)
             .orElseThrow(() -> new ResourceNotFoundException("Conta Spotify não vinculada"));
 
-        // Verifica se precisa atualizar cache
+        //booleano pra atualizar cache
         boolean needsRefresh = forceRefresh || 
             shouldRefreshCache(account.getLastSyncAt());
 
@@ -54,7 +54,7 @@ public class ProfileService {
             syncTracksFromSpotify(account);
         }
 
-        // Calcula estatísticas de gênero
+        //estatistica de genero (musical)
         LocalDate periodStart = LocalDate.now().minusDays(historyDays);
         LocalDate periodEnd = LocalDate.now();
         
@@ -70,13 +70,12 @@ public class ProfileService {
             periodEnd
         );
 
-        // Busca top N gêneros
         List<GenreStat> topGenres = genreStats.stream()
             .sorted(Comparator.comparing(GenreStat::getNormalizedScore).reversed())
             .limit(topGenresLimit)
             .toList();
 
-        // Mapeia para estilos
+        //match de estilos 
         List<MatchingStyle> matchingStyles = findMatchingStyles(topGenres);
 
         return ProfileResponse.builder()
@@ -158,12 +157,11 @@ public class ProfileService {
     ) {
         List<String> genres = new ArrayList<>();
         
-        // Extrai gêneros dos artistas
+        //cha revelação de generos dos artistas
         for (SpotifyArtist artist : item.getTrack().getArtists()) {
             if (artist.getGenres() != null && !artist.getGenres().isEmpty()) {
                 genres.addAll(artist.getGenres());
             } else {
-                // Busca gêneros do artista via API
                 SpotifyArtist fullArtist = spotifyClient.getArtist(
                     account.getAccessToken(), 
                     artist.getId()

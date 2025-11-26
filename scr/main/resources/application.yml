@@ -36,11 +36,11 @@ spring:
       client:
         registration:
           spotify:
-            client-id: ${SPOTIFY_CLIENT_ID}
-            client-secret: ${SPOTIFY_CLIENT_SECRET}
+            client-id: ${502bfbf6c58549c7b53dda08a2017c21}
+            client-secret: ${d3b9d083300f4ebda571894389cf5963}
             scope: user-read-recently-played,user-top-read
             authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/api/v1/auth/spotify/callback"
+            redirect-uri: "{http://127.0.0.1:8000/callback}"
         provider:
           spotify:
             authorization-uri: https://accounts.spotify.com/authorize
